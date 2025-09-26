@@ -8,7 +8,7 @@ name = input("Имя: ")
 age = int(input("Возраст: "))
 print(f"Привет, {name}! Через год тебе будет {age + 1}.")
 ```
-images/lab01/01.png
+![](images/lab01/01.png)
 
 ## Задание 2 
 ```
@@ -23,7 +23,7 @@ avg = _sum / 2
 
 print(f"sum={_sum:.2f}; avg={avg:.2f}")
 ```
-images/lab01/02.png
+![](images/lab01/02.png)
 
 ## Задание 3
 ```
@@ -40,7 +40,7 @@ print(f"{base:.2f}")
 print(f"{vat_amount:.2f}")
 print(f"{total:.2f}")
 ```
-images/lab01/03.png
+![](images/lab01/03.png)
 
 ## Задание 4
  ```
@@ -52,7 +52,7 @@ minutes = m % 60
 
 print(f"{hours:02d}:{minutes:02d}")
  ```
- src/lab01./ex04.py
+![](images/lab01/04.png)
 
  ## Задание 5 
 ```
@@ -63,7 +63,7 @@ initsial = ''.join(part[0].upper() for part in parts)
 cleaned_length = len(' '.join(parts))
 print(f"{initsial} {cleaned_length}")
 ```
-images/lab01/05.png
+![](images/lab01/05.png)
 
  ## Задание 6
  ```
@@ -81,4 +81,4 @@ for _ in range(N):
 
 print(count_full_time, count_part_time)
  ```
- src/lab01./ex06.py
+ ![](images/lab01/06.png)
