@@ -1,5 +1,92 @@
 # Калантарян Мери 
 
+# Лабараторная работа 3
+
+## Задание А 
+## А1
+```
+def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
+    text=text.replace('\n',' ').replace('\t',' ').replace('\r',' ')
+    while '  ' in text:
+        text=text.replace('  ',' ')
+    text=text.strip()
+    if yo2e:
+        text=text.replace('ё','е').replace('Ё','Е')
+    if casefold:
+        text=text.casefold()
+    return text
+
+print(normalize("ПрИвЕт\nМИр\t"))
+print(normalize("ёжик, Ёлка"))
+print(normalize("Hello\r\nWorld"))
+print(normalize("  двойные   пробелы  "))
+```
+![](images/A/lab03/A1.png)
+
+## A2
+```
+def tokenize(text: str) -> list[str]:
+    text=''.join(char for char in text if char.isalpha()\
+    or char.isspace() or char == '-' or char in '0123456789')
+    text=text.split()
+    return text
+print(tokenize("привет мир"))
+print(tokenize("hello, world!!!"))
+print(tokenize("по-настоящему круто"))
+print(tokenize("2025 год"))
+print(tokenize("emoji 😀 не слово"))
+```
+![](images/A/lab03/A2.png)
+
+## A3
+```
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    freq = {}
+    for token in tokens:
+        if token in freq:
+            freq[token] += 1
+        else:
+            freq[token] =1
+    return freq
+
+tokens1 = ["a","b","a","c","b","a"]
+freq1 = count_freq(tokens1)
+tokens2 = ["bb","aa","bb","aa","cc"]
+freq2 = count_freq(tokens2)
+
+print(f"Токены {tokens1} → частоты {freq1}")
+print(f"Токены {tokens2} → частоты {freq2}")
+```
+![](images/A/lab03/A3.png)
+
+## A4
+```
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    freq = {}
+    for token in tokens:
+        if token in freq:
+            freq[token] += 1
+        else:
+            freq[token] =1
+    return freq
+
+def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
+    sorted_items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))#получаем пары слов,сорт(по уб,по вз)
+    return sorted_items[:n]
+
+tokens1 = ["a","b","a","c","b","a"]
+freq1 = count_freq(tokens1)
+tokens2 = ["bb","aa","bb","aa","cc"]
+freq2 = count_freq(tokens2)
+
+print(f"top_n(..., n=2) → {top_n(freq1, 2)}")
+print(f"top_n(..., n=2) → {top_n(freq2, 2)}")
+```
+![](images/A/lab03/A4.png)
+
+
+
+
 # Лабараторная работа 2 
 
 ## Задание A
@@ -15,7 +102,7 @@ print(min_max([-5, -2, -9]))
 print(min_max([]))
 print(min_max([1.5, 2, 2.0, -3.1]))
 ```
-![](images/lab01/lab02 /a1.png)
+![](images/A/lab02/a1.png)
 
 ## A2
 ```
