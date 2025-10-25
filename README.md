@@ -15,7 +15,7 @@ print(min_max([-5, -2, -9]))
 print(min_max([]))
 print(min_max([1.5, 2, 2.0, -3.1]))
 ```
-images/lab01/lab02 /a1.png
+![](images/lab01/lab02 /a1.png)
 
 ## A2
 ```
@@ -27,7 +27,7 @@ print(unique_sorted([]))
 print(unique_sorted([-1, -1, 0, 2, 2]))
 print(unique_sorted([1.0, 1, 2.5, 2.5, 0]))
 ```
-images/A/lab02/a2.png
+![](images/A/lab02/a2.png)
 
 ## A3
 ```
@@ -45,7 +45,7 @@ print(flatten([[1, 2], (3, 4, 5)]))
 print(flatten([[1], [], [2, 3]]))
 print(flatten([[1, 2], "ab"]))
 ```
-images/A/lab02/a3.png
+![](images/A/lab02/a3.png)
 
 ## Задание В 
 ## B1
@@ -65,7 +65,7 @@ print(transpose([[1, 2], [3, 4]]))
 print(transpose([]))
 print(transpose([[1, 2], [3]]))
 ```
-images/A/lab02/b1.png
+![](images/A/lab02/b1.png)
 
 ## B2
 ```
@@ -83,7 +83,7 @@ print(row_sums([[-1, 1], [10, -10]]))
 print(row_sums([[0, 0], [0, 0]]))
 print(row_sums([[1, 2], [3]]))
 ```
-images/A/lab02/b2.png
+![](images/A/lab02/b2.png)
 
 ## B3
 ```
@@ -101,7 +101,7 @@ print(col_sums([[-1, 1], [10, -10]]))
 print(col_sums([[0, 0], [0, 0]]))
 print(col_sums([[1, 2], [3]]))
 ```
-images/A/lab02/b3.png
+![](images/A/lab02/b3.png)
 
 ## Задание С
 ## C1
@@ -118,7 +118,7 @@ print(format_record(("Петров Пётр", "IKBO-12", 5.0)))
 print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
 print(format_record(("  сидорова  анна   сергеевна ", "ABB-01", 3.999)))
 ```
-images/A/lab02/c1.png
+![](images/A/lab02/c1.png)
 
 ## С2
 ```
@@ -139,9 +139,7 @@ print(format_record(("Петров Пётр", "IKBO-12", 5.0)))
 print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
 print(format_record(("  сидорова  анна   сергеевна ", "ABB-01", 3.999)))
 ```
-images/A/lab02/c2.png
-
-
+![](images/A/lab02/c2.png)
 
 
 
