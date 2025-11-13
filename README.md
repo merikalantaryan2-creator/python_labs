@@ -1,5 +1,165 @@
 # Калантарян Мери 
 
+# Лабараторная работа  6 
+
+## cli_convert
+```
+
+"""
+CLI-конвертер форматов данных (json2csv, csv2json, csv2xlsx)
+ЛР6 — argparse
+"""
+
+import argparse
+from pathlib import Path
+import sys
+
+# from src.lab05.json_csv import json_to_csv, csv_to_json
+# from src.lab05.csv_xlsx import csv_to_xlsx
+
+
+def check_file_exists(path_str: str):
+    path = Path(path_str)
+    if not path.exists():
+        print(f"Ошибка: входной файл '{path}' не найден.", file=sys.stderr)
+        sys.exit(1)
+    return path
+
+
+def json2csv(input_path: str, output_path: str):
+    check_file_exists(input_path)
+    print(f"[demo] Конвертация JSON → CSV: {input_path} → {output_path}")
+    # json_to_csv(input_path, output_path)
+
+
+def csv2json(input_path: str, output_path: str):
+    check_file_exists(input_path)
+    print(f"[demo] Конвертация CSV → JSON: {input_path} → {output_path}")
+    # csv_to_json(input_path, output_path)
+
+
+def csv2xlsx(input_path: str, output_path: str):
+    check_file_exists(input_path)
+    print(f"[demo] Конвертация CSV → XLSX: {input_path} → {output_path}")
+    # csv_to_xlsx(input_path, output_path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="CLI-конвертеры данных (ЛР6)")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    # ---- json2csv ----
+    p1 = sub.add_parser("json2csv", help="Преобразовать JSON в CSV")
+    p1.add_argument("--in", dest="input", required=True, help="Входной JSON-файл")
+    p1.add_argument("--out", dest="output", required=True, help="Выходной CSV-файл")
+
+    # ---- csv2json ----
+    p2 = sub.add_parser("csv2json", help="Преобразовать CSV в JSON")
+    p2.add_argument("--in", dest="input", required=True, help="Входной CSV-файл")
+    p2.add_argument("--out", dest="output", required=True, help="Выходной JSON-файл")
+
+    # ---- csv2xlsx ----
+    p3 = sub.add_parser("csv2xlsx", help="Преобразовать CSV в XLSX")
+    p3.add_argument("--in", dest="input", required=True, help="Входной CSV-файл")
+    p3.add_argument("--out", dest="output", required=True, help="Выходной XLSX-файл")
+
+    args = parser.parse_args()
+
+    if args.cmd == "json2csv":
+        json2csv(args.input, args.output)
+    elif args.cmd == "csv2json":
+        csv2json(args.input, args.output)
+    elif args.cmd == "csv2xlsx":
+        csv2xlsx(args.input, args.output)
+if __name__ == "__main__":
+    main()
+```
+![](images/A/lab06/stats.png)
+
+## 
+
+```
+"""
+CLI-утилиты для анализа текста (cat, stats)
+ЛР6 — argparse
+"""
+
+import argparse
+from pathlib import Path
+import sys
+
+# Импортируем функции из предыдущих лабораторных
+# from src.lab03.text_stats import word_frequencies  # пример
+# from src.lib.io_helpers import read_text_file      # пример
+
+
+def cat_command(input_path: str, numbered: bool = False):
+    """Вывод содержимого файла построчно"""
+    path = Path(input_path)
+    if not path.exists():
+        print(f"Ошибка: файл '{input_path}' не найден.", file=sys.stderr)
+        sys.exit(1)
+
+    with path.open(encoding="utf-8") as f:
+        for i, line in enumerate(f, start=1):
+            if numbered:
+                print(f"{i:4d}: {line.rstrip()}")
+            else:
+                print(line.rstrip())
+
+
+def stats_command(input_path: str, top_n: int = 5):
+    """Простейший анализ частот слов (упрощённо, если нет lab03)"""
+    path = Path(input_path)
+    if not path.exists():
+        print(f"Ошибка: файл '{input_path}' не найден.", file=sys.stderr)
+        sys.exit(1)
+
+    with path.open(encoding="utf-8") as f:
+        text = f.read().lower()
+
+    words = [w.strip(".,!?;:\"'()[]") for w in text.split()]
+    freq = {}
+    for w in words:
+        if not w:
+            continue
+        freq[w] = freq.get(w, 0) + 1
+
+    sorted_items = sorted(freq.items(), key=lambda x: x[1], reverse=True)[:top_n]
+
+    print(f"Топ {top_n} слов в '{input_path}':")
+    for word, count in sorted_items:
+        print(f"{word:15s} {count}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="CLI-утилиты для анализа текста (cat, stats)"
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # ---- cat ----
+    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
+    cat_parser.add_argument("--input", required=True, help="Путь к файлу")
+    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")
+
+    # ---- stats ----
+    stats_parser = subparsers.add_parser("stats", help="Частоты слов")
+    stats_parser.add_argument("--input", required=True, help="Путь к текстовому файлу")
+    stats_parser.add_argument("--top", type=int, default=5, help="Количество топ-слов")
+
+    args = parser.parse_args()
+
+    if args.command == "cat":
+        cat_command(args.input, args.n)
+    elif args.command == "stats":
+        stats_command(args.input, args.top)
+if __name__ == "__main__":
+    main()
+```
+![](images/A/lab06/cat.png)
+
+
 
 # Лабараторная работа 5 
 
