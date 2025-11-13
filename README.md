@@ -1,5 +1,201 @@
 # Калантарян Мери 
 
+
+# Лабараторная работа 5 
+
+## csv_xlsx
+```
+import csv
+from pathlib import Path
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
+    """CSV → XLSX"""
+    cpath = Path(csv_path)
+    if not cpath.exists():
+        raise FileNotFoundError(f"Нет файла: {csv_path}")
+
+    with cpath.open(encoding="utf-8") as f:
+        rows = list(csv.reader(f))
+    if not rows:
+        raise ValueError("Пустой CSV")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+
+    for row in rows:
+        ws.append(row)
+
+    # Автоширина
+    for col in ws.columns:
+        length = max(len(str(cell.value or "")) for cell in col)
+        ws.column_dimensions[get_column_letter(col[0].column)].width = max(8, length + 2)
+
+    wb.save(xlsx_path)
+
+
+if __name__ == "__main__":
+    csv_to_xlsx("data/samples/cities.csv", "data/out/cities.xlsx")
+    csv_to_xlsx("data/samples/people.csv", "data/out/people.xlsx")
+```
+## json_csv
+```
+ # src/lab05/json_csv.py
+import json
+import csv
+from pathlib import Path
+
+
+def json_to_csv(json_path: str, csv_path: str) -> None:
+    """
+    Преобразует JSON-файл в CSV.
+    Поддерживает список словарей [{...}, {...}], заполняет отсутствующие поля пустыми строками.
+    Кодировка UTF-8. Порядок колонок — как в первом объекте или алфавитный (указать в README).
+    """
+    json_file = Path(json_path)
+    csv_file = Path(csv_path)
+    
+    if not json_file.exists():
+        raise FileNotFoundError(f"JSON файл не найден: {json_path}")
+    
+    if json_file.suffix.lower() != '.json':
+        raise ValueError(f"Неверный тип файла: ожидается .json, получен {json_file.suffix}")
+    
+    try:
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Ошибка декодирования JSON: {e}")
+    
+    if not isinstance(data, list):
+        raise ValueError("JSON должен содержать список объектов")
+    
+    if not data:
+        raise ValueError("JSON файл пустой")
+    
+    if not all(isinstance(item, dict) for item in data):
+        raise ValueError("Все элементы JSON должны быть словарями")
+    
+    all_fields = set()
+    for item in data:
+        all_fields.update(item.keys())
+    fieldnames = sorted(all_fields)
+    
+    try:
+        with open(csv_file, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            for row in data:
+                complete_row = {field: str(row.get(field, '')) for field in fieldnames}
+                writer.writerow(complete_row)
+                
+    except Exception as e:
+        raise ValueError(f"Ошибка записи CSV: {e}")
+
+
+def csv_to_json(csv_path: str, json_path: str) -> None:
+    """
+    Преобразует CSV в JSON (список словарей).
+    Заголовок обязателен, значения сохраняются как строки.
+    json.dump(..., ensure_ascii=False, indent=2)
+    """
+    csv_file = Path(csv_path)
+    json_file = Path(json_path)
+    
+    if not csv_file.exists():
+        raise FileNotFoundError(f"CSV файл не найден: {csv_path}")
+    
+    if csv_file.suffix.lower() != '.csv':
+        raise ValueError(f"Неверный тип файла: ожидается .csv, получен {csv_file.suffix}")
+    
+    try:
+        with open(csv_file, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            fieldnames = reader.fieldnames
+            
+            if not fieldnames:
+                raise ValueError("CSV файл не содержит заголовка")
+            
+            rows = list(reader)
+            
+    except Exception as e:
+        raise ValueError(f"Ошибка чтения CSV: {e}")
+    
+    if not rows:
+        raise ValueError("CSV файл пустой (нет данных, только возможный заголовок)")
+    
+    data = []
+    for row in rows:
+        string_row = {key: str(value) if value is not None else '' for key, value in row.items()}
+        data.append(string_row)
+    
+    try:
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+            
+    except Exception as e:
+        raise ValueError(f"Ошибка записи JSON: {e}")
+    
+
+
+
+
+    # пример использования
+if __name__ == "__main__":
+    # JSON -> CSV
+    json_to_csv("data/samples/people.json", "data/out/people_from_json.csv")
+    
+    # CSV -> JSON  
+    csv_to_json("data/samples/people.csv", "data/out/people_from_csv.json")
+```
+## Входные данные 
+```
+# data/samples/cities.csv
+city,population,area_km2,foundation_year
+Москва,12678079,2561,1147
+Санкт-Петербург,5398064,1439,1703
+Казань,1257341,614,1005
+Новосибирск,1625631,502,1893
+```
+```
+# data/samples/people.csv
+name,age,city,profession,salary
+Алексей,25,Москва,Инженер,
+Мария,30,Санкт-Петербург,,80000
+Иван,28,Казань,Разработчик,90000
+```
+```
+[
+  {
+    "name": "Алексей",
+    "age": 25,
+    "city": "Москва",
+    "profession": "Инженер"
+  },
+  {
+    "name": "Мария",
+    "age": 30,
+    "city": "Санкт-Петербург",
+    "salary": 80000
+  },
+  {
+    "name": "Иван",
+    "age": 28,
+    "city": "Казань",
+    "profession": "Разработчик",
+    "salary": 90000
+  }
+]
+```
+## Вывод 
+![](images/A/lab05/cvs=>json.png)
+![](images/A/lab05/json=>cvs.png)
+
+
+
 # Лабараторная работа 4 
 
 ## io_txt_csv
@@ -217,8 +413,9 @@ def main():
     print("Топ-5:")
     for word, count in top_words:
         print(f"{word}:{count}")
-    ```
+```
     ![](images/A/lab03/B.png)
+
 
 # Лабараторная работа 2 
 
@@ -359,13 +556,15 @@ print(format_record(("Петров Пётр", "IKBO-12", 5.0)))
 print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
 print(format_record(("  сидорова  анна   сергеевна ", "ABB-01", 3.999)))
 ```
+
 ![](images/A/lab02/c2.png)
+
 
 
 
 # Лабораторная работа 1 
 
-## Задание 1 **
+## Задание 1 
 ```
 name = input("Имя: ")
 age = int(input("Возраст: "))
@@ -418,6 +617,7 @@ print(f"{hours:02d}:{minutes:02d}")
 ![](images/lab01/04.png)
 
  ## Задание 5 
+
 ```
 
 fio = input().strip() # strip- удаляет лишние пробелы 
