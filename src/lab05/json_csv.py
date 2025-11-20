@@ -21,7 +21,7 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
     
     try:
         with open(json_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+            data = json.load(f)# загрузка JSON данных
     except json.JSONDecodeError as e:
         raise ValueError(f"Ошибка декодирования JSON: {e}")
     
@@ -34,9 +34,9 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
     if not all(isinstance(item, dict) for item in data):
         raise ValueError("Все элементы JSON должны быть словарями")
     
-    all_fields = set()
+    all_fields = set() #создает множество для уникальных полей
     for item in data:
-        all_fields.update(item.keys())
+        all_fields.update(item.keys())#добавляет ключи каждого словаря
     fieldnames = sorted(all_fields)
     
     try:

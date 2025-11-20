@@ -4,18 +4,9 @@
 
 ## cli_convert
 ```
-
-"""
-CLI-конвертер форматов данных (json2csv, csv2json, csv2xlsx)
-ЛР6 — argparse
-"""
-
-import argparse
-from pathlib import Path
+import argparse # для обработки аргументов командной строки
+from pathlib import Path 
 import sys
-
-# from src.lab05.json_csv import json_to_csv, csv_to_json
-# from src.lab05.csv_xlsx import csv_to_xlsx
 
 
 def check_file_exists(path_str: str):
@@ -24,7 +15,6 @@ def check_file_exists(path_str: str):
         print(f"Ошибка: входной файл '{path}' не найден.", file=sys.stderr)
         sys.exit(1)
     return path
-
 
 def json2csv(input_path: str, output_path: str):
     check_file_exists(input_path)
@@ -76,21 +66,15 @@ if __name__ == "__main__":
 ```
 ![](images/A/lab06/stats.png)
 
-## 
+## cli_text
+
 
 ```
-"""
-CLI-утилиты для анализа текста (cat, stats)
-ЛР6 — argparse
-"""
 
 import argparse
 from pathlib import Path
 import sys
 
-# Импортируем функции из предыдущих лабораторных
-# from src.lab03.text_stats import word_frequencies  # пример
-# from src.lib.io_helpers import read_text_file      # пример
 
 
 def cat_command(input_path: str, numbered: bool = False):
@@ -156,6 +140,7 @@ def main():
         stats_command(args.input, args.top)
 if __name__ == "__main__":
     main()
+
 ```
 ![](images/A/lab06/cat.png)
 

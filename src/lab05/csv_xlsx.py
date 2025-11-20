@@ -6,13 +6,13 @@ from openpyxl.utils import get_column_letter
 def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     """CSV → XLSX"""
     cpath = Path(csv_path)
-    if not cpath.exists():
+    if not cpath.exists():# проверяет существует ли файл
         raise FileNotFoundError(f"Нет файла: {csv_path}")
 
     with cpath.open(encoding="utf-8") as f:
-        rows = list(csv.reader(f))
+        rows = list(csv.reader(f)) #читает все строки в список списков
     if not rows:
-        raise ValueError("Пустой CSV")
+        raise ValueError("Пустой CSV")# проверяет что список строк пустой
 
     wb = Workbook()
     ws = wb.active
@@ -22,9 +22,9 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
         ws.append(row)
 
     # Автоширина
-    for col in ws.columns:
+    for col in ws.columns:#перебирает все колонки листа
         length = max(len(str(cell.value or "")) for cell in col)
-        ws.column_dimensions[get_column_letter(col[0].column)].width = max(8, length + 2)
+        ws.column_dimensions[get_column_letter(col[0].column)].width = max(8, length + 2)# если длина не соответсвует
 
     wb.save(xlsx_path)
 
