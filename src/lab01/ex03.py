@@ -1,4 +1,4 @@
-price = float(input("цену -" ))
+price = float(input("цену -"))
 discount = float(input("сикдка -"))
 vat = float(input("ндс -"))
 

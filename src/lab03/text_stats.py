@@ -2,6 +2,7 @@ import sys
 import os
 from lib import text as txt
 
+
 def main():
     text = input()
     normalized_text = txt.normalize(text, casefold=True, yo2e=True)
@@ -15,6 +16,7 @@ def main():
     print("Топ-5:")
     for word, count in top_words:
         print(f"{word}:{count}")
+
 
 if __name__ == "__main__":
     main()

@@ -4,8 +4,9 @@ def row_sums(mat: list[list[float | int]]) -> list[float]:
     num_cols = len(mat[0])
     for row in mat:
         if len(row) != num_cols:
-            return 'ValueError'
+            return "ValueError"
     return [sum(row) for row in mat]
+
 
 print(row_sums([[1, 2, 3], [4, 5, 6]]))
 print(row_sums([[-1, 1], [10, -10]]))

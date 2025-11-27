@@ -1,5 +1,7 @@
 def f(number):
-    return float(number.replace(',', '.'))
+    return float(number.replace(",", "."))
+
+
 num1 = f(input("ввведите 1 число - "))
 num2 = f(input("введите 2 число - "))
 
