@@ -1,5 +1,5 @@
-import pytest
-from src.lib.text import normalize, tokenize, count_freq, top_n
+import pytest  # Импорт фреймворка для тестирования
+from src.lib.text import normalize, tokenize, count_freq, top_n  # Импорт тестируемых функций
 
 
 class TestNormalize:
@@ -8,18 +8,18 @@ class TestNormalize:
     @pytest.mark.parametrize(
         "source, expected",
         [
-            ("ПрИвЕт\nМИр\t", "привет мир"),
-            ("ёжик, Ёлка", "ежик, елка"),
-            ("Hello\r\nWorld", "hello world"),
-            ("  двойные   пробелы  ", "двойные пробелы"),
-            ("", ""),
-            ("   ", ""),
-            ("ТЕСТ!!!", "тест!!!"),
-            ("Много\t\t\tтабов", "много табов"),
+            ("ПрИвЕт\nМИр\t", "привет мир"),  # Тест: приведение к нижнему регистру + замена пробельных символов
+            ("ёжик, Ёлка", "ежик, елка"),     # Тест: замена буквы 'ё' на 'е' в разных позициях
+            ("Hello\r\nWorld", "hello world"), # Тест: обработка Windows-style переводов строк (\r\n)
+            ("  двойные   пробелы  ", "двойные пробелы"),  # Тест: удаление лишних пробелов
+            ("", ""),                          # Тест: обработка пустой строки
+            ("   ", ""),                       # Тест: обработка строки только из пробелов
+            ("ТЕСТ!!!", "тест!!!"),           # Тест: сохранение знаков препинания после нормализации
+            ("Много\t\t\tтабов", "много табов"), # Тест: замена множественных табов на одинарные пробелы
         ],
     )
     def test_normalize_basic(self, source, expected):
-        assert normalize(source) == expected
+        assert normalize(source) == expected  # Проверка что функция возвращает ожидаемый результат
 
 
 class TestTokenize:
@@ -28,83 +28,83 @@ class TestTokenize:
     @pytest.mark.parametrize(
         "source, expected",
         [
-            ("привет мир", ["привет", "мир"]),
-            ("hello world test", ["hello", "world", "test"]),
-            ("один, два. три!", ["один", "два", "три"]),
-            ("", []),
-            ("   ", []),
-            ("только-только", ["только-только"]),
-            ("раз     много     пробелов", ["раз", "много", "пробелов"]),
+            ("привет мир", ["привет", "мир"]),           # Базовый тест: разделение по пробелу
+            ("hello world test", ["hello", "world", "test"]), # Тест: несколько английских слов
+            ("один, два. три!", ["один", "два", "три"]), # Тест: разделение по знакам препинания
+            ("", []),                                    # Тест: пустая строка -> пустой список
+            ("   ", []),                                 # Тест: строка с пробелами -> пустой список
+            ("только-только", ["только-только"]),        # Тест: слова с дефисами остаются целыми
+            ("раз     много     пробелов", ["раз", "много", "пробелов"]), # Тест: множественные пробелы игнорируются
         ],
     )
     def test_tokenize_basic(self, source, expected):
-        assert tokenize(source) == expected
+        assert tokenize(source) == expected  # Проверка корректности токенизации
 
 
 class TestCountFreq:
     """Тесты для функции count_freq"""
 
     def test_count_freq_basic(self):
-        tokens = ["я", "люблю", "python", "я", "python", "python"]
-        result = count_freq(tokens)
-        expected = {"я": 2, "люблю": 1, "python": 3}
-        assert result == expected
+        tokens = ["я", "люблю", "python", "я", "python", "python"]  # Входные данные с повторениями
+        result = count_freq(tokens)  # Вызов тестируемой функции
+        expected = {"я": 2, "люблю": 1, "python": 3}  # Ожидаемый результат подсчета частот
+        assert result == expected  # Проверка корректности подсчета
 
     def test_count_freq_empty(self):
-        assert count_freq([]) == {}
+        assert count_freq([]) == {}  # Тест: пустой список токенов -> пустой словарь
 
     def test_count_freq_case_sensitive(self):
-        tokens = ["Word", "word", "WORD"]
-        result = count_freq(tokens)
+        tokens = ["Word", "word", "WORD"]  # Токены в разном регистре
+        result = count_freq(tokens)  # Вызов функции подсчета частот
         # Предполагаем, что токены уже нормализованы
-        assert result == {"Word": 1, "word": 1, "WORD": 1}
+        assert result == {"Word": 1, "word": 1, "WORD": 1}  # Проверка что регистр учитывается
 
 
 class TestTopN:
     """Тесты для функции top_n"""
 
     def test_top_n_basic(self):
-        freq = {"a": 5, "b": 10, "c": 3, "d": 7}
-        result = top_n(freq, 2)
-        expected = [("b", 10), ("d", 7)]
-        assert result == expected
+        freq = {"a": 5, "b": 10, "c": 3, "d": 7}  # Словарь частот
+        result = top_n(freq, 2)  # Запрашиваем топ-2 элемента
+        expected = [("b", 10), ("d", 7)]  # Ожидаемый результат: b(10), d(7)
+        assert result == expected  # Проверка корректности отбора топ-N
 
     def test_top_n_tie_breaker(self):
         # Тест на случай одинаковой частоты (должна быть алфавитная сортировка)
-        freq = {"z": 5, "a": 5, "m": 5, "b": 10}
-        result = top_n(freq, 3)
+        freq = {"z": 5, "a": 5, "m": 5, "b": 10}  # Словарь с одинаковыми частотами
+        result = top_n(freq, 3)  # Запрашиваем топ-3 элемента
         # b с самой высокой частотой, затем a, m, z с одинаковой частотой
         # но в алфавитном порядке: a, m, z
-        expected = [("b", 10), ("a", 5), ("m", 5)]
-        assert result == expected
+        expected = [("b", 10), ("a", 5), ("m", 5)]  # Ожидаемая сортировка: по частоте, затем по алфавиту
+        assert result == expected  # Проверка алгоритма разрешения ничьих
 
     def test_top_n_more_than_available(self):
-        freq = {"a": 1, "b": 2}
-        result = top_n(freq, 5)
-        expected = [("b", 2), ("a", 1)]
-        assert result == expected
+        freq = {"a": 1, "b": 2}  # Словарь с 2 элементами
+        result = top_n(freq, 5)  # Запрашиваем больше элементов чем есть
+        expected = [("b", 2), ("a", 1)]  # Ожидаем все имеющиеся элементы в правильном порядке
+        assert result == expected  # Проверка обработки случая N > количества элементов
 
     def test_top_n_empty(self):
-        assert top_n({}, 5) == []
+        assert top_n({}, 5) == []  # Тест: пустой словарь частот -> пустой список
 
     def test_top_n_zero(self):
-        freq = {"a": 1, "b": 2}
-        assert top_n(freq, 0) == []
+        freq = {"a": 1, "b": 2}  # Словарь с данными
+        assert top_n(freq, 0) == []  # Тест: запрос 0 элементов -> пустой список
 
 
 class TestIntegration:
     """Интеграционные тесты для всего пайплайна"""
 
     def test_full_pipeline(self):
-        text = "Привет мир! Мир привет всем. Всем привет еще раз."
-        normalized = normalize(text)
-        tokens = tokenize(normalized)
-        freq = count_freq(tokens)
-        top_words = top_n(freq, 2)
+        text = "Привет мир! Мир привет всем. Всем привет еще раз."  # Исходный текст для обработки
+        normalized = normalize(text)  # Этап 1: нормализация текста
+        tokens = tokenize(normalized)  # Этап 2: токенизация нормализованного текста
+        freq = count_freq(tokens)  # Этап 3: подсчет частот токенов
+        top_words = top_n(freq, 2)  # Этап 4: выбор топ-2 самых частых слов
 
-        assert normalized == "привет мир! мир привет всем. всем привет еще раз."
-        assert "привет" in tokens
-        assert "мир" in tokens
-        assert freq["привет"] == 3
-        assert freq["мир"] == 2
-        assert top_words[0][0] == "привет"
+        assert normalized == "привет мир! мир привет всем. всем привет еще раз."  # Проверка нормализации
+        assert "привет" in tokens  # Проверка что слово "привет" есть в токенах
+        assert "мир" in tokens  # Проверка что слово "мир" есть в токенах
+        assert freq["привет"] == 3  # Проверка частоты слова "привет" (должно быть 3)
+        assert freq["мир"] == 2  # Проверка частоты слова "мир" (должно быть 2)
+        assert top_words[0][0] == "привет"  # Проверка что самое частое слово - "привет"
