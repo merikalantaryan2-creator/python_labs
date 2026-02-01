@@ -1,0 +1,18 @@
+[
+  {
+    "# data/samples/people.csv": "name",
+    "null": "['age', 'city', 'profession', 'salary']"
+  },
+  {
+    "# data/samples/people.csv": "Алексей",
+    "null": "['25', 'Москва', 'Инженер', '']"
+  },
+  {
+    "# data/samples/people.csv": "Мария",
+    "null": "['30', 'Санкт-Петербург', '', '80000']"
+  },
+  {
+    "# data/samples/people.csv": "Иван",
+    "null": "['28', 'Казань', 'Разработчик', '90000']"
+  }
+]
